@@ -1,0 +1,7 @@
+{
+    "error": {
+        "message": "api token not valid",
+        "tip": "Please refer to api documentation at https://github.com/toggl/toggl_api_docs on how to get lists of objects accessible to you, also check you are using correct api token as listed on your profile page.",
+        "code": 401
+    }
+}

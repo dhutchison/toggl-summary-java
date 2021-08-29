@@ -1,5 +1,8 @@
 package com.devwithimagination.toggl.core.processor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -11,6 +14,8 @@ import com.devwithimagination.toggl.core.model.TimeSummary;
 import com.devwithimagination.toggl.core.model.api.SimplifiedDetailedReportItem;
 
 public class TimeReporter {
+
+    private final Logger logger = LoggerFactory.getLogger(TimeReporter.class);
 
     private final boolean debug;
 
@@ -56,7 +61,7 @@ public class TimeReporter {
      * @param currentIndex the index in the array for the current entry
      * @param array        the array containing the entries
      */
-    public boolean wasPreviousEntryBreakStart(final int currentIndex, final List<SimplifiedDetailedReportItem> array) {
+    public <T extends SimplifiedDetailedReportItem> boolean wasPreviousEntryBreakStart(final int currentIndex, final List<T> array) {
 
         /*
          * A previous entry counts as a break start if: - it has a marker tag
@@ -95,7 +100,7 @@ public class TimeReporter {
      * @param array        the array containing the entries
      * 
      */
-    public Duration getTimeBetweenEntries(final int currentIndex, final List<SimplifiedDetailedReportItem> array) {
+    public <T extends SimplifiedDetailedReportItem> Duration getTimeBetweenEntries(final int currentIndex, final List<T> array) {
 
         /* Work out the time between this entry and the previous one */
         final Duration timeBetweenEntries;
@@ -111,6 +116,7 @@ public class TimeReporter {
             timeBetweenEntries = Duration.ZERO;
         }
 
+        
         if (debug) {
             System.out.println("Time between entries: " + timeBetweenEntries.toString());
         }
@@ -146,17 +152,23 @@ public class TimeReporter {
      * 
      * @param reportData The detailed time entry items for the reporting period
      */
-    public TimeSummary calculateTimeTotals(final List<SimplifiedDetailedReportItem> reportData) {
+    public <T extends SimplifiedDetailedReportItem> TimeSummary calculateTimeTotals(final List<T> reportData) {
 
         /* Setup the initial return object with initial values */
         final var timeSummary = new TimeSummary();
 
         /* Sort the input data by the item start date & time */
-        final var sortedReportData = new ArrayList<>(reportData);
+        final var sortedReportData = new ArrayList<SimplifiedDetailedReportItem>();
+        if (reportData != null) {
+            sortedReportData.addAll(reportData);
+        }
         sortedReportData.sort(Comparator.comparing(SimplifiedDetailedReportItem::getStartZonedDateTime));
 
         for (int index = 0; index < sortedReportData.size(); index++) {
             var entry = sortedReportData.get(index);
+
+            //TODO: use fine level logging instead of debug/sysout
+            //TOOD: use suppliers
 
             if (debug) {
                 System.out.println("======================");

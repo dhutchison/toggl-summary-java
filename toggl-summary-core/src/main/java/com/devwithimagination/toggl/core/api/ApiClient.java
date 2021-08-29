@@ -92,8 +92,9 @@ public class ApiClient {
         /**
          * If there are more pages, call the API again, otherwise return the data
          */
-        if (responseData.getData().size() > 0 && responseData.getData().size() ==
-            responseData.getPerPage()) {
+        if (responseData.getData() != null &&
+                !responseData.getData().isEmpty() && 
+                responseData.getData().size() == responseData.getPerPage()) {
 
             data.addAll(getDetailedReportData(page + 1));
         } 
@@ -148,6 +149,11 @@ public class ApiClient {
 
         if (config.isDebug()) {
             System.out.println("Response body: " + response.body());
+        }
+
+        if (response.statusCode() != 200) {
+            //TODO: add a test case for this
+            throw new IOException("Failed to load data: " + response.body());
         }
 
         final T responseData;
