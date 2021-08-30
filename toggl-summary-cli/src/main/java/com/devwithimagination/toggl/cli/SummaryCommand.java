@@ -88,14 +88,14 @@ public class SummaryCommand implements Callable<Integer> {
             System.out.println();
 
             processedSummary.forEach(s -> {
-                System.out.println(String.format("* %s: %.2d%% (%s)", 
+                System.out.println(String.format("* %s: %.2f%% (%s)", 
                     s.getName(), s.getPercentageOfTotalTime(), timeReporter.formatMillis(s.getBookedTime())));
 
 
                     if (!s.getSubgroupSummary().isEmpty()) {
-                        s.getSubgroupSummary().forEach(g -> {
-                          System.out.println(String.format("  * %s: %.2d%% (%s)", g.getName(), g.getPercentageOfTotalTime(), timeReporter.formatMillis(g.getBookedTime())));
-                        });
+                        s.getSubgroupSummary().forEach(g -> 
+                          System.out.println(String.format("  * %s: %.2f%% (%s)", g.getName(), g.getPercentageOfTotalTime(), timeReporter.formatMillis(g.getBookedTime())))
+                        );
                       }
                       System.out.println();
             });
