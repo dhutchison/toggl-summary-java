@@ -73,7 +73,7 @@ public class SummaryReporter {
      */
     public double calculatePercentage(final int partialValue, final int totalValue) {
         if (totalValue > 0) {
-            return (100 * partialValue) / totalValue;
+            return 100 * ((long) partialValue / (double) totalValue);
         } else {
             return 0;
         }
@@ -153,8 +153,7 @@ public class SummaryReporter {
         }
 
         /* Sort by time */
-        // TODO: may need reversed!
-        Collections.sort(retItems, Comparator.comparing(Summary::getBookedTime));
+        Collections.sort(retItems, Comparator.comparing(Summary::getBookedTime).reversed());
 
         return retItems;
     }

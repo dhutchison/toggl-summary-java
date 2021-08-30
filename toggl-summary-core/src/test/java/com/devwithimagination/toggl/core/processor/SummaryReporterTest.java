@@ -81,7 +81,7 @@ class SummaryReporterTest {
 
     @ParameterizedTest()
     @MethodSource("getPercentageCalculationTests")
-    void testPercentageCalculation(final int partialValue, final int totalValue, final int expectedValue) {
+    void testPercentageCalculation(final int partialValue, final int totalValue, final double expectedValue) {
 
         var actualValue = testInstance.calculatePercentage(partialValue, totalValue);
         assertEquals(expectedValue, actualValue);
@@ -92,12 +92,17 @@ class SummaryReporterTest {
             Arguments.of(
                 10,
                 100,
-                10
+                10d
             ),
             Arguments.of(
                 10,
                 0,
-                0
+                0d
+            ),
+            Arguments.of(
+                30323000,
+                126642000,
+                23.94387328058622d
             )
         );
 
